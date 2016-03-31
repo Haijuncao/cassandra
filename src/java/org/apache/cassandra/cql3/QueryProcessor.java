@@ -299,6 +299,12 @@ public class QueryProcessor implements QueryHandler
             return null;
     }
 
+    public static UntypedResultSet execute(String query, ConsistencyLevel cl, Object... values)
+    throws RequestExecutionException
+    {
+        return execute(query, cl, internalQueryState(), values);
+    }
+
     public static UntypedResultSet execute(String query, ConsistencyLevel cl, QueryState state, Object... values)
     throws RequestExecutionException
     {

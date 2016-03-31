@@ -33,7 +33,13 @@ import org.apache.cassandra.config.ViewDefinition;
 import org.apache.cassandra.db.*;
 import org.apache.cassandra.db.rows.*;
 import org.apache.cassandra.db.partitions.*;
-
+import org.apache.cassandra.db.commitlog.ReplayPosition;
+import org.apache.cassandra.db.partitions.PartitionUpdate;
+import org.apache.cassandra.dht.Token;
+import org.apache.cassandra.repair.SystemDistributedKeyspace;
+import org.apache.cassandra.service.StorageProxy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Manages {@link View}'s for a single {@link ColumnFamilyStore}. All of the views for that table are created when this
@@ -150,6 +156,7 @@ public class ViewManager
 
         forTable(view.getDefinition().baseTableMetadata()).removeByName(name);
         SystemKeyspace.setViewRemoved(keyspace.getName(), view.name);
+        SystemDistributedKeyspace.setViewRemoved(keyspace.getName(), view.name);
     }
 
     public void buildAllViews()
